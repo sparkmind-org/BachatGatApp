@@ -9,7 +9,16 @@ class MembersListScreen extends StatefulWidget {
 }
 
 class _MembersListScreenState extends State<MembersListScreen> {
- int _selectedIndex = 0;
+  int _selectedIndex = 1;
+
+  // Sample hardcoded list of members
+  final List<Map<String, String>> members = [
+    {'name': 'Pratham Babre', 'phone': '127898980890'},
+    {'name': 'Kishore', 'phone': '0345976231'},
+    {'name': 'Rahul', 'phone': '0345976231'},
+    {'name': 'Balu', 'phone': '0345976231'},
+    {'name': 'Wasim', 'phone': '0345976231'},
+  ];
 
   void _onItemTapped(int index) {
     switch (index) {
@@ -30,13 +39,60 @@ class _MembersListScreenState extends State<MembersListScreen> {
         break;
     }
   }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
-        title: const Text('Members List'),
+      appBar: AppBar(
+        title: const Text('Members'),
       ),
-      body: Center(
-        child: Text('Add Member Screen', style: TextStyle(fontSize: 24)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Search bar
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: Colors.grey),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Members search',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Member list
+            Expanded(
+              child: ListView.builder(
+                itemCount: members.length,
+                itemBuilder: (context, index) {
+                  final member = members[index];
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.grey[300],
+                      child: const Icon(Icons.person, color: Colors.white),
+                    ),
+                    title: Text(member['name']!),
+                    subtitle: Text(member['phone']!),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
