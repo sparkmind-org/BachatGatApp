@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+  const MenuScreen({super.key});
 
   @override
-  _MenuScreenState createState() => _MenuScreenState();
+  MenuScreenState createState() => MenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> {
+class MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 4; // Assuming 'Menu' is the last item in the footer
 
   void _onItemTapped(int index) {
@@ -79,9 +79,9 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                   const SizedBox(height: 16),
                   // User details
-                  Row(
+                 const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'NAME : Pratham babre',
                         style: TextStyle(fontWeight: FontWeight.bold),
