@@ -8,6 +8,15 @@ import '../screens/loan/loan_collection_screen.dart';
 import '../screens/reports/reports_screen.dart';
 import '../screens/menu/menu_screen.dart';
 import '../screens/add/add_screen.dart';
+import '../screens/add/addtilescreen/issue_notice_screen.dart';
+import '../screens/add/addtilescreen/loan_emi_screen.dart';
+import '../screens/add/addtilescreen/bank_details_screen.dart';
+import '../screens/add/addtilescreen/meeting_schedule_screen.dart';
+import '../screens/add/addtilescreen/income_expense_screen.dart';
+import '../screens/add/addtilescreen/dividend_repay_screen.dart';
+import '../screens/add/addtilescreen/fine_collection_screen.dart';
+import '../screens/add/addtilescreen/saving_collection_screen.dart';
+
 import '../screens/notification/notification_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
@@ -21,4 +30,15 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/reports': (context) => const ReportsScreen(),
   '/menu': (context) => const MenuScreen(),
   '/notification': (context) => const NotificationsScreen(),
+  '/add-bank-details': (context) => const AddBankDetailsScreen(),
+  '/issue-notice': (context) => const IssueNoticeScreen(),
+  '/add-saving': (context) => const AddSavingCollectionScreen(),
+  '/add-income-expense': (context) => const AddIncomeExpenseScreen(),
+  '/add-dividend': (context) => const AddDividendRepayScreen(),
+  '/add-meeting': (context) => const ScheduleMeetingScreen(),
+  '/add-loan-emi': (context) => const AddLoanEmiScreen(),
+  '/add-fine': (context) => const AddFineCollectionScreen(),
+
+
+
 };

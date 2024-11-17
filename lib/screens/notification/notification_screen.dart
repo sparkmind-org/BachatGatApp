@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../widgets/custom_footer.dart'; // Assuming CustomFooter is defined here
 
 class NotificationsScreen extends StatefulWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key });
 
   @override
   NotificationsScreenState createState() => NotificationsScreenState();

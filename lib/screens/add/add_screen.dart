@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
 
 class AddScreen extends StatefulWidget {
-  const AddScreen({Key? key}) : super(key: key);
+  const AddScreen({super.key});
 
   @override
-  _AddScreenState createState() => _AddScreenState();
+  AddScreenState createState() => AddScreenState();
 }
 
-class _AddScreenState extends State<AddScreen> {
+class AddScreenState extends State<AddScreen> {
   int _selectedIndex = 2; // Set to 2 since this is the 'Add' screen
 
   void _onItemTapped(int index) {
@@ -35,36 +35,31 @@ class _AddScreenState extends State<AddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ADD'),
+        title: const Text('Add'),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        iconTheme: const IconThemeData(color: Colors.black),
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Wrap(
+          spacing: 12, // Space between cards horizontally
+          runSpacing: 12, // Space between cards vertically
           children: [
-            _buildCard(
-              icon: Icons.person_add_alt,
-              label: 'Member Add',
-              onTap: () {
-               Navigator.pushNamed(context, '/add-member');
-              },
-            ),
-            SizedBox(height: 16),
-            _buildCard(
-              icon: Icons.attach_money,
-              label: 'Issue Loan',
-              onTap: () {
-               Navigator.pushNamed(context, '/issue-loan');
-              },
-            ),
-            SizedBox(height: 16),
-            _buildCard(
-              icon: Icons.input,
-              label: 'Collection Entry',
-              onTap: () {
-                Navigator.pushNamed(context, '/loan-collection');
-              },
-            ),
+            _buildAddCard('Add Saving Collection', Icons.savings, '/add-saving'),
+            _buildAddCard(
+                'Add Loan Installment/EMI', Icons.attach_money, '/add-loan-emi'),
+            _buildAddCard('Add Fine Collection', Icons.gavel, '/add-fine'),
+            _buildAddCard('Issue New Loan', Icons.new_releases, '/issue-loan'),
+            _buildAddCard('Add Income/Expense', Icons.receipt, '/add-income-expense'),
+            _buildAddCard('Add Dividend/Repay', Icons.payments, '/add-dividend'),
+            _buildAddCard('Add New Member', Icons.person_add, '/add-member'),
+            _buildAddCard('Create/Schedule Meeting', Icons.event, '/add-meeting'),
+            _buildAddCard('Add Bank Details/Statements',
+                Icons.account_balance_wallet, '/add-bank-details'),
+            _buildAddCard('Issue Notice', Icons.notifications_active, '/issue-notice'),
           ],
         ),
       ),
@@ -80,27 +75,34 @@ class _AddScreenState extends State<AddScreen> {
     );
   }
 
-  Widget _buildCard({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _buildAddCard(String title, IconData iconData, String route) {
     return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        elevation: 4,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Row(
-            children: [
-              Icon(icon, size: 40, color: Colors.grey[700]),
-              SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 3 - 24, // Adjusted for three cards per row
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(iconData, size: 30, color: Colors.grey[700]),
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis, // Adds ellipsis for overflow
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
