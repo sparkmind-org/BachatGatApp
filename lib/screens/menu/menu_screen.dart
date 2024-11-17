@@ -45,7 +45,7 @@ class MenuScreenState extends State<MenuScreen> {
           IconButton(
             icon: const Icon(Icons.notifications_none, color: Colors.black),
             onPressed: () {
-              // Add notification functionality here
+              Navigator.pushNamed(context, '/notification');
             },
           ),
         ],

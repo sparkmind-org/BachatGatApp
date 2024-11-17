@@ -8,6 +8,7 @@ import '../screens/loan/loan_collection_screen.dart';
 import '../screens/reports/reports_screen.dart';
 import '../screens/menu/menu_screen.dart';
 import '../screens/add/add_screen.dart';
+import '../screens/notification/notification_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const LoginScreen(),
@@ -19,4 +20,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/loan-collection': (context) => const LoanCollectionScreen(),
   '/reports': (context) => const ReportsScreen(),
   '/menu': (context) => const MenuScreen(),
+  '/notification': (context) => const NotificationsScreen(),
 };

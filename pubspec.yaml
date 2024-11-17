@@ -7,6 +7,8 @@ environment:
   sdk: ">=3.5.4 <4.0.0"  # Note: Updated to proper SDK range format
 
 dependencies:
+  flutter_svg: ^1.0.0
+  websafe_svg: ^2.0.1
   flutter:
     sdk: flutter
   intl: ^0.17.0
@@ -23,4 +25,7 @@ flutter:
     - assets/02.jpg
     - assets/03.jpg
     - assets/04.jpg
+    - assets/icon/Bellicon.svg
+    - assets/icon/Select.svg
+
   uses-material-design: true
