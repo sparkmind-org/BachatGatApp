@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
 
 class ReportsScreen extends StatefulWidget {
-  const ReportsScreen({Key? key}) : super(key: key);
+  const ReportsScreen({super.key});
 
   @override
-  _ReportsScreenState createState() => _ReportsScreenState();
+  ReportsScreenState createState() => ReportsScreenState();
 }
 
-class _ReportsScreenState extends State<ReportsScreen> {
+class ReportsScreenState extends State<ReportsScreen> {
   int _selectedIndex = 3; // Assuming 'Reports' is the 4th item in the footer
 
   void _onItemTapped(int index) {
@@ -48,15 +48,46 @@ class _ReportsScreenState extends State<ReportsScreen> {
           spacing: 12, // Space between cards horizontally
           runSpacing: 12, // Space between cards vertically
           children: [
-            _buildReportCard('Loan Distribution report', Icons.attach_money),
-            _buildReportCard('Pending Saving Emi', Icons.savings),
-            _buildReportCard('Pending Loan Emi', Icons.pending_actions),
-            _buildReportCard('Other Expenses Report', Icons.receipt),
-            _buildReportCard('Other Income Report', Icons.trending_up),
-            _buildReportCard('Balance Sheet of Bachat Gat', Icons.pie_chart),
-            _buildReportCard('Balance Sheet of Members', Icons.people_alt),
             _buildReportCard(
-                'Loan requirement and Risk validation Report', Icons.assessment),
+              'Loan Distribution Report',
+              Icons.attach_money,
+              '/loan-distribution',
+            ),
+            _buildReportCard(
+              'Pending Saving EMI',
+              Icons.savings,
+              '/pending-saving-emi',
+            ),
+            _buildReportCard(
+              'Pending Loan EMI',
+              Icons.pending_actions,
+              '/pending-loan-emi',
+            ),
+            _buildReportCard(
+              'Other Expenses Report',
+              Icons.receipt,
+              '/other-expenses',
+            ),
+            _buildReportCard(
+              'Other Income Report',
+              Icons.trending_up,
+              '/other-income',
+            ),
+            _buildReportCard(
+              'Balance Sheet of Bachat Gat',
+              Icons.pie_chart,
+              '/balance-sheet-bachat',
+            ),
+            _buildReportCard(
+              'Balance Sheet of Members',
+              Icons.people_alt,
+              '/balance-sheet-members',
+            ),
+            _buildReportCard(
+              'Loan Requirement & Risk Validation Report',
+              Icons.assessment,
+              '/loan-risk-validation',
+            ),
           ],
         ),
       ),
@@ -72,29 +103,34 @@ class _ReportsScreenState extends State<ReportsScreen> {
     );
   }
 
-  Widget _buildReportCard(String title, IconData iconData) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 3 - 24, // Adjusted for three cards per row
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(iconData, size: 30, color: Colors.grey[700]),
-              const SizedBox(height: 8),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis, // Adds ellipsis for overflow
-              ),
-            ],
+  Widget _buildReportCard(String title, IconData iconData, String route) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 3 - 24, // Three cards per row
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(iconData, size: 30, color: Colors.grey[700]),
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis, // Adds ellipsis for overflow
+                ),
+              ],
+            ),
           ),
         ),
       ),

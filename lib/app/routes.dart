@@ -16,8 +16,16 @@ import '../screens/add/addtilescreen/income_expense_screen.dart';
 import '../screens/add/addtilescreen/dividend_repay_screen.dart';
 import '../screens/add/addtilescreen/fine_collection_screen.dart';
 import '../screens/add/addtilescreen/saving_collection_screen.dart';
-
+import '../screens/reports/reportcard/loan_distribution_screen.dart';
+import '../screens/reports/reportcard/pending_loan_emi_screen.dart';
+import '../screens/reports/reportcard/pending_saving_emi_screen.dart';
+import '../screens/reports/reportcard/other_expenses_screen.dart';
 import '../screens/notification/notification_screen.dart';
+import '../screens/reports/reportcard/other_income_screen.dart';
+import '../screens/reports/reportcard/balance_sheet_bachat_screen.dart';
+
+import '../screens/reports/reportcard/balance_sheet_members_screen.dart';
+import '../screens/reports/reportcard/loan_risk_validation_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const LoginScreen(),
@@ -38,6 +46,15 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/add-meeting': (context) => const ScheduleMeetingScreen(),
   '/add-loan-emi': (context) => const AddLoanEmiScreen(),
   '/add-fine': (context) => const AddFineCollectionScreen(),
+  '/loan-distribution': (context) => const LoanDistributionScreen(),
+  '/pending-saving-emi': (context) => const PendingSavingEmiScreen(),
+  '/pending-loan-emi': (context) => const PendingLoanEmiScreen(),
+  '/other-expenses': (context) => const OtherExpensesScreen(),
+  '/other-income': (context) => const OtherIncomeScreen(),
+  '/balance-sheet-bachat': (context) => const BalanceSheetBachatScreen(),
+  '/balance-sheet-members': (context) => const BalanceSheetMembersScreen(),
+  '/loan-risk-validation': (context) => const LoanRiskValidationScreen(),
+
 
 
 
