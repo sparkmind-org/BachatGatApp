@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../widgets/custom_footer.dart'; // Import CustomFooter
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_settings_ui/flutter_settings_ui.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../../widgets/custom_footer.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -11,7 +12,14 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  int _selectedIndex = 4; // Assuming the 'Menu' section is the last tab in the footer.
+  int _selectedIndex = 4;
+
+  // Toggle states for notifications
+  bool _isPushNotificationsEnabled = true;
+  bool _isEmailNotificationsEnabled = false;
+  bool _isSavingsRemindersEnabled = false;
+  bool _isLoanDueDatesEnabled = false;
+  bool _isGroupAnnouncementsEnabled = false;
 
   void _onItemTapped(int index) {
     switch (index) {
@@ -33,6 +41,58 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
+  Widget _buildProfileSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage('assets/01.jpg'),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Pratham Babre',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Admin',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'prathambabre@gmail.com',
+                  style: TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  '+91 900-812-9336',
+                  style: TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.edit, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,49 +104,58 @@ class _MenuScreenState extends State<MenuScreen> {
         titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
         centerTitle: true,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/notification');
-              },
-              child: SvgPicture.asset(
-                'assets/icon/Bellicon.svg',
-                width: 24,
-                height: 24,
+          Stack(
+            children: [
+              IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icon/Bellicon.svg',
+                  height: 24,
+                  width: 24,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/notification');
+                },
               ),
-            ),
+              Positioned(
+                right: 6,
+                top: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Text(
+                    '2',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+          
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          // Profile Section
-          _buildProfileSection(),
-          const SizedBox(height: 16),
-
-          // Notifications Section
-          _buildNotificationsSection(),
-          const SizedBox(height: 16),
-
-          // Group Management Section
+      body: SettingsList(
+        platform: DevicePlatform.iOS,
+        sections: [
+          SettingsSection(
+            title: const Text('Profile'),
+            tiles: [
+              CustomSettingsTile(
+                child: _buildProfileSection(),
+              ),
+            ],
+          ),
+          _buildNotificationSection(),
           _buildGroupManagementSection(),
-          const SizedBox(height: 16),
-
-          // Language and Regional Settings
           _buildLanguageRegionalSection(),
-          const SizedBox(height: 16),
-
-          // Help & Support
           _buildHelpSupportSection(),
-          const SizedBox(height: 16),
-
-          // Feedback and About
           _buildFeedbackAboutSection(),
-          const SizedBox(height: 16),
-
-          // Logout Section
           _buildLogoutSection(),
         ],
       ),
@@ -102,236 +171,184 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 
-Widget _buildProfileSection() {
-  return Card(
-    elevation: 2,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              // Center the CircleAvatar
-              Center(
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey[300],
-                  child: const Icon(Icons.person, size: 50, color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 16),
+  SettingsSection _buildNotificationSection() {
+    return SettingsSection(
+      title: const Text('Notifications'),
+      tiles: [
+        SettingsTile.switchTile(
+          leading: const Icon(Icons.notifications),
+          title: const Text('Push Notifications'),
+          initialValue: _isPushNotificationsEnabled,
+          onToggle: (value) {
+            setState(() {
+              _isPushNotificationsEnabled = value;
+            });
+          },
+        ),
+        SettingsTile.switchTile(
+          leading: const Icon(Icons.email),
+          title: const Text('Email Notifications'),
+          initialValue: _isEmailNotificationsEnabled,
+          onToggle: (value) {
+            setState(() {
+              _isEmailNotificationsEnabled = value;
+            });
+          },
+        ),
+        SettingsTile.switchTile(
+          leading: const Icon(Icons.savings),
+          title: const Text('Savings Reminders'),
+          initialValue: _isSavingsRemindersEnabled,
+          onToggle: (value) {
+            setState(() {
+              _isSavingsRemindersEnabled = value;
+            });
+          },
+        ),
+        SettingsTile.switchTile(
+          leading: const Icon(Icons.calendar_today),
+          title: const Text('Loan EMI Due Dates'),
+          initialValue: _isLoanDueDatesEnabled,
+          onToggle: (value) {
+            setState(() {
+              _isLoanDueDatesEnabled = value;
+            });
+          },
+        ),
+        SettingsTile.switchTile(
+          leading: const Icon(Icons.announcement),
+          title: const Text('Group Announcements'),
+          initialValue: _isGroupAnnouncementsEnabled,
+          onToggle: (value) {
+            setState(() {
+              _isGroupAnnouncementsEnabled = value;
+            });
+          },
+        ),
+      ],
+    );
+  }
 
-              // Align text to the left
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Name : Pratham Babre',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Role : Admin',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Email : prathambabre@gmail.com',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Phone : 9008129336',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+// Remaining sections remain unchanged.
+}
 
-          // Position the edit icon in the top-right corner
-          Positioned(
-            top: 8,
-            right: 8,
-            child: IconButton(
-              onPressed: () {
-                // Add edit functionality here
-              },
-              icon: const Icon(Icons.edit, size: 20, color: Colors.black),
-            ),
-          ),
-        ],
+SettingsSection _buildGroupManagementSection() {
+  return SettingsSection(
+    title: const Text('Group Management'),
+    tiles: [
+      SettingsTile.navigation(
+        leading: const Icon(Icons.edit_note_sharp),
+        title: const Text('View/Edit Details'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/group-details');
+        },
       ),
-    ),
+      SettingsTile.navigation(
+        leading: const Icon(Icons.people_outline),
+        title: const Text('Change Member Roles'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/member-roles');
+        },
+      ),
+    ],
   );
 }
 
-  Widget _buildNotificationsSection() {
-    return _buildCustomExpansionTile(
-      title: 'Notifications',
-      children: [
-        SwitchListTile.adaptive(
-          title: const Text('Push Notifications'),
-          value: true,
-          onChanged: (value) {
-            // Handle toggle
-          },
-        ),
-        SwitchListTile.adaptive(
-          title: const Text('Email Notifications'),
-          value: false,
-          onChanged: (value) {
-            // Handle toggle
-          },
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Notification Categories:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        SwitchListTile.adaptive(
-          title: const Text('Savings Reminders'),
-          value: false,
-          onChanged: (value) {
-            // Handle toggle
-          },
-        ),
-        SwitchListTile.adaptive(
-          title: const Text('Loan EMI Due Dates'),
-          value: false,
-          onChanged: (value) {
-            // Handle toggle
-          },
-        ),
-        SwitchListTile.adaptive(
-          title: const Text('Group Announcements'),
-          value: false,
-          onChanged: (value) {
-            // Handle toggle
-          },
-        ),
-      ],
-    );
-  }
+SettingsSection _buildLanguageRegionalSection() {
+  return SettingsSection(
 
-  Widget _buildGroupManagementSection() {
-    return _buildCustomExpansionTile(
-      title: 'Group Management',
-      children: [
-        ListTile(
-          title: const Text('View/Edit Details'),
-          onTap: () {
-            // Navigate to group details
-          },
+    title: const Text('Language & Regional Settings'),
+    tiles: [
+      SettingsTile.navigation(
+        leading: const Icon(Icons.language),
+        title: const Text('Language'),
+        trailing: DropdownButton<String>(
+          value: 'English',
+          items: ['English', 'Hindi', 'Marathi']
+              .map((lang) => DropdownMenuItem(value: lang, child: Text(lang)))
+              .toList(),
+          onChanged: (value) {},
         ),
-        ListTile(
-          title: const Text('Change Member Roles'),
-          onTap: () {
-            // Navigate to change roles
-          },
-        ),
-      ],
-    );
-  }
+      ),
+      SettingsTile.navigation(
+        leading: const Icon(Icons.location_on),
+        title: const Text('Regional Settings'),
+        onPressed: (context) {
+        //  Navigator.pushNamed(context, '/regional-settings');
+        },
+      ),
+    ],
+  );
+}
 
-  Widget _buildLanguageRegionalSection() {
-    return _buildCustomExpansionTile(
-      title: 'Language & Regional Settings',
-      children: [
-        ListTile(
-          title: const Text('Language'),
-          trailing: DropdownButton<String>(
-            value: 'English',
-            items: ['English', 'Hindi', 'Marathi']
-                .map((lang) => DropdownMenuItem(
-                      value: lang,
-                      child: Text(lang),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              // Handle language change
-            },
-          ),
-        ),
-        ListTile(
-          title: const Text('Regional Settings'),
-          onTap: () {
-            // Navigate to regional settings
-          },
-        ),
-      ],
-    );
-  }
+SettingsSection _buildHelpSupportSection() {
+  return SettingsSection(
+    title: const Text('Help & Support'),
+    tiles: [
+      SettingsTile.navigation(
+        leading: const Icon(Icons.support),
+        title: const Text('Contact Support'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/support');
+        },
+      ),
+      SettingsTile.navigation(
+        leading: const Icon(Icons.question_answer),
+        title: const Text('FAQ Section'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/faq');
+        },
+      ),
+      SettingsTile.navigation(
+        leading: const Icon(Icons.play_circle_fill),
+        title: const Text('Tutorials'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/tutorials');
+        },
+      ),
+    ],
+  );
+}
 
-  Widget _buildHelpSupportSection() {
-    return _buildCustomExpansionTile(
-      title: 'Help & Support',
-      children: [
-        ListTile(
-          title: const Text('Contact Support'),
-          onTap: () {
-            // Navigate to contact support
-          },
-        ),
-        ListTile(
-          title: const Text('FAQ Section'),
-          onTap: () {
-            // Navigate to FAQ
-          },
-        ),
-        ListTile(
-          title: const Text('Tutorials'),
-          onTap: () {
-            // Navigate to tutorials
-          },
-        ),
-      ],
-    );
-  }
+SettingsSection _buildFeedbackAboutSection() {
+  return SettingsSection(
+    title: const Text('Feedback & About'),
+    tiles: [
+      SettingsTile.navigation(
+        leading: const Icon(Icons.feedback),
+        title: const Text('Feedback & Community'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/feedback');
+        },
+      ),
+      SettingsTile.navigation(
+        leading: const Icon(Icons.privacy_tip),
+        title: const Text('Terms & Privacy'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/terms-privacy');
+        },
+      ),
+      SettingsTile.navigation(
+        leading: const Icon(Icons.info),
+        title: const Text('More About'),
+        onPressed: (context) {
+          Navigator.pushNamed(context, '/about');
+        },
+      ),
+    ],
+  );
+}
 
-  Widget _buildFeedbackAboutSection() {
-    return _buildCustomExpansionTile(
-      title: 'Feedback & About',
-      children: [
-        ListTile(
-          title: const Text('Feedback & Community'),
-          onTap: () {
-            // Navigate to feedback
-          },
-        ),
-        ListTile(
-          title: const Text('Terms, Privacy'),
-          onTap: () {
-            // Navigate to terms and privacy
-          },
-        ),
-        ListTile(
-          title: const Text('More About'),
-          onTap: () {
-            // Navigate to about us
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLogoutSection() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
+SettingsSection _buildLogoutSection() {
+  return SettingsSection(
+    tiles: [
+      SettingsTile.navigation(
+        leading: const Icon(Icons.logout),
         title: const Text(
           'Logout',
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
-        onTap: () {
-          // Confirm logout
+        onPressed: (context) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -355,25 +372,6 @@ Widget _buildProfileSection() {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildCustomExpansionTile({
-    required String title,
-    required List<Widget> children,
-  }) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ExpansionTile(
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        trailing: const SizedBox(), // Hide dropdown icon
-        children: children,
-      ),
-    );
-  }
+    ],
+  );
 }
