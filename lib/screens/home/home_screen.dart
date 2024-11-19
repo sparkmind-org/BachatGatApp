@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F5FD),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false, // Remove the back button
         title: const Text(
@@ -53,18 +53,38 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/notification');
-              },
-              child: SvgPicture.asset(
-                'assets/icon/Bellicon.svg',
-                width: 24,
-                height: 24,
+          Stack(
+            children: [
+              IconButton(
+                icon: SvgPicture.asset(
+                  'assets/icon/Bellicon.svg',
+                  height: 24,
+                  width: 24,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/notification');
+                },
               ),
-            ),
+              Positioned(
+                  right: 6,
+                  top: 0,
+                  child:  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '2',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+              ),
+            ],
           ),
         ],
       ),
@@ -137,27 +157,62 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
+  List<List<Map<String, dynamic>>> _groupCards(List<Map<String, dynamic>> cards, int rowSize) {
+    List<List<Map<String, dynamic>>> groupedCards = [];
+    for (int i = 0; i < cards.length; i += rowSize) {
+      groupedCards.add(cards.sublist(i, i + rowSize > cards.length ? cards.length : i + rowSize));
+    }
+    return groupedCards;
+  }
   // Group Overview Content
   Widget _buildGroupOverview() {
+    final List<Map<String, dynamic>> cardData = [
+      {'title': 'Total Group Savings', 'value': '₹5,00,000.00', 'color': Colors.green},
+      {'title': 'Current Bank Balance', 'value': '₹5,00,000.00', 'color': Colors.blue},
+      {'title': 'Bachat Gat Loan/Subsidy', 'value': '₹5,00,000.00', 'color': Colors.orange},
+      {'title': 'Total Penalties Collected', 'value': '₹10,000.00', 'color': Colors.red},
+      {'title': 'Upcoming Loan Dues', 'value': '₹1,00,000.00', 'color': Colors.purple},
+      {'title': 'Pending Contributions', 'value': '₹25,000.00', 'color': Colors.teal},
+      {'title': 'Loan Repayment Percentage', 'value': '70%', 'color': Colors.redAccent},
+    ];
+
+    List<List<Map<String, dynamic>>> groupedCardData = _groupCards(cardData, 4);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Cards Layout
-          Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: [
-              _buildCard('Total Group Savings', '₹5,00,000.00', Colors.green),
-              _buildCard('Current Bank Balance', '₹5,00,000.00', Colors.blue),
-              _buildCard('Bachat Gat Loan/Subsidy', '₹5,00,000.00', Colors.orange),
-              _buildCard('Total Penalties Collected', '₹10,000.00', Colors.red),
-              _buildCard('Upcoming Loan Dues', '₹1,00,000.00', Colors.purple),
-              _buildCard('Pending Contributions', '₹25,000.00', Colors.teal),
-              _buildCard('Loan Repayment Percentage', '70%', Colors.redAccent),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (int i = 0; i < groupedCardData[0].length; i++) // Loop through columns
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Column(
+                      children: [
+                        // First row card
+                        if (groupedCardData[0].length > i)
+                          _buildCard(
+                            groupedCardData[0][i]['title'],
+                            groupedCardData[0][i]['value'],
+                            groupedCardData[0][i]['color'],
+                          ),
+                        const SizedBox(height: 8.0), // Space between rows
+
+                        // Second row card (if available)
+                        if (groupedCardData.length > 1 && groupedCardData[1].length > i)
+                          _buildCard(
+                            groupedCardData[1][i]['title'],
+                            groupedCardData[1][i]['value'],
+                            groupedCardData[1][i]['color'],
+                          ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: 16.0),
 
@@ -254,6 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCard(String title, String value, Color color) {
     return Container(
       width: (MediaQuery.of(context).size.width - 48) / 2,
+      height: 100.0,
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: Colors.white,
