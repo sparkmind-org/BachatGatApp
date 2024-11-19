@@ -43,43 +43,35 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F5FD),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false, // Remove the back button
+        title: const Text(
+          'Bachat Gat',
+          style: TextStyle(color: Colors.black, fontSize: 18.0),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/notification');
+              },
+              child: SvgPicture.asset(
+                'assets/icon/Bellicon.svg',
+                width: 24,
+                height: 24,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header with search bar and bell icon
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Search Bar
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        prefixIcon: const Icon(Icons.search),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  // Bell Icon
-                  SvgPicture.asset(
-                    'assets/icon/Bellicon.svg',
-                    width: 24,
-                    height: 24,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8.0),
-
             // Toggle buttons for "Group Overview" and "Insights"
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -144,6 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 
   // Group Overview Content
   Widget _buildGroupOverview() {
@@ -215,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildInsightsCard(
           title: 'Loan Repayment Progress',
           chartWidget: _buildLoanRepaymentChart(),
+          
         ),
         const SizedBox(height: 16.0),
         _buildInsightsCard(
@@ -453,83 +447,126 @@ Widget _buildSavingsGrowthChart() {
 
   
 Widget _buildLoanRepaymentChart() {
-  return BarChart(
-    BarChartData(
-      barGroups: [
-        BarChartGroupData(
-          x: 0,
-          barRods: [
-            BarChartRodData(
-              toY: 30,
-              color: Colors.blue,
-              width: 12,
-            ),
-            BarChartRodData(
-              toY: 50,
-              color: Colors.grey.withOpacity(0.3),
-              width: 12,
-            ),
-          ],
-        ),
-        BarChartGroupData(
-          x: 1,
-          barRods: [
-            BarChartRodData(
-              toY: 40,
-              color: Colors.blue,
-              width: 12,
-            ),
-            BarChartRodData(
-              toY: 70,
-              color: Colors.grey.withOpacity(0.3),
-              width: 12,
-            ),
-          ],
-        ),
-        // Add more BarChartGroupData for each month as needed
-      ],
-      titlesData: FlTitlesData(
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            interval: 20,
-            getTitlesWidget: (value, meta) => Text(
-              value.toInt().toString(),
-              style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+    // Define the months
+    final List<String> months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    // Generate bar groups with demo values
+    final List<BarChartGroupData> barGroups = List.generate(12, (index) {
+      return BarChartGroupData(
+        x: index,
+        barRods: [
+          BarChartRodData(
+            toY: (index + 1) * 10.0, // Example value for blue bar
+            color: Colors.blue,
+            width: 16,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          BarChartRodData(
+            toY: (12 - index) * 5.0, // Example value for grey bar
+            color: Colors.grey.withOpacity(0.3),
+            width: 16,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ],
+        barsSpace: 8,
+      );
+    });
+
+    // Build the BarChart
+    return SizedBox(
+      height: 300,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+          child: SizedBox(
+            width: 800, // Width to allow scrolling for 12 months
+            child: BarChart(
+              BarChartData(
+                barGroups: barGroups,
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 40,
+                      interval: 20,
+                      getTitlesWidget: (value, meta) => Text(
+                        value.toInt().toString(),
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        if (value.toInt() >= 0 && value.toInt() < months.length) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              months[value.toInt()],
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 12,
+                              ),
+                            ),
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                  ),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) => FlLine(
+                    color: Colors.grey.withOpacity(0.2),
+                    strokeWidth: 1,
+                  ),
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: const Border.symmetric(
+                    horizontal: BorderSide(color: Colors.grey, width: 0.5),
+                  ),
+                ),
+                barTouchData: BarTouchData(
+                  touchTooltipData: BarTouchTooltipData(
+                    tooltipBorder: BorderSide(color: Colors.blueAccent.withOpacity(0.8)),
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      return BarTooltipItem(
+                        '${months[group.x.toInt()]}: ${rod.toY.toInt()}',
+                        const TextStyle(color: Colors.white),
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
           ),
         ),
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: (value, meta) {
-              final labels = ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'];
-              if (value.toInt() < labels.length) {
-                return Text(
-                  labels[value.toInt()],
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 12,
-                  ),
-                );
-              }
-              return Container();
-            },
-          ),
-        ),
-        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
-      gridData: FlGridData(show: false), // Remove grid lines
-      borderData: FlBorderData(show: false),
-    ),
-  );
-}
+    );
+  }
+
+
+
+
+
+
+
+
+
 
 Widget _buildMonthlyCollectionChart() {
   return LineChart(
