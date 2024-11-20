@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class CustomFooter extends StatelessWidget {
   final int currentIndex;
@@ -12,18 +13,20 @@ class CustomFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
+    return CurvedNavigationBar(
+      index: currentIndex,
       onTap: onItemTapped,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.transparent, // Background for animation
+      color: const Color.fromARGB(255, 137, 142, 204),
+      buttonBackgroundColor: const Color.fromARGB(255, 198, 135, 135),
+      height: 60,
+      animationDuration: const Duration(milliseconds: 300),
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Members'),
-        BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 35), label: 'ADD'),
-        BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Reports'),
-        BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
+        Icon(Icons.home, size: 30, color: Colors.black),
+        Icon(Icons.group, size: 30, color: Colors.black),
+        Icon(Icons.add_circle, size: 35, color: Colors.black),
+        Icon(Icons.bar_chart, size: 30, color: Colors.black),
+        Icon(Icons.menu, size: 30, color: Colors.black),
       ],
     );
   }

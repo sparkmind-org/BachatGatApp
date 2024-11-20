@@ -16,6 +16,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   settings_ui: ^2.0.2
   flutter_settings_ui: ^3.0.1
+  curved_navigation_bar: ^1.0.6
+  
+  
+  
+  
 
 
 dev_dependencies:
@@ -31,5 +36,6 @@ flutter:
     - assets/04.jpg
     - assets/icon/Bellicon.svg
     - assets/icon/Select.svg
+    - assets/icon/LoginIcon.svg
 
   uses-material-design: true
