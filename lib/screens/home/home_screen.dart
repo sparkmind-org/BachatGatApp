@@ -270,6 +270,11 @@ class _HomeScreenState extends State<HomeScreen> {
           title: 'Monthly Collection Trend',
           chartWidget: _buildMonthlyCollectionChart(),
         ),
+        const SizedBox(height: 18.0),
+        _buildInsightsCard(
+          title: 'Total Monthly Collection',
+          chartWidget: _buildTotalCollectinChart(),
+        ),
       ],
     ),
   );
@@ -616,13 +621,142 @@ Widget _buildLoanRepaymentChart() {
   }
 
 
+Widget _buildTotalCollectinChart() {
+  return SingleChildScrollView(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Title section
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back_ios, size: 18),
+                onPressed: () {},
+              ),
+              const Text(
+                'March 2023',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8.0),
 
+        // Pie chart and labels
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Pie chart
+              Flexible(
+                flex: 4,
+                child: SizedBox(
+                  height: 180, // Ensures the pie chart height is fixed
+                  child: PieChart(
+                    PieChartData(
+                      sections: [
+                        PieChartSectionData(
+                          color: Colors.red,
+                          value: 55,
+                          title: '55%',
+                          titleStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          radius: 28,
+                        ),
+                        PieChartSectionData(
+                          color: Colors.pinkAccent,
+                          value: 20,
+                          title: '20%',
+                          titleStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          radius: 28,
+                        ),
+                        PieChartSectionData(
+                          color: Colors.orange,
+                          value: 25,
+                          title: '25%',
+                          titleStyle: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          radius: 28,
+                        ),
+                      ],
+                      centerSpaceRadius: 22,
+                      sectionsSpace: 1,
+                    ),
+                  ),
+                ),
+              ),
 
-
-
-
-
-
+              // Labels section
+              Flexible(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Row(
+                        children: [
+                          CircleAvatar(backgroundColor: Colors.red, radius: 6),
+                          SizedBox(width: 8),
+                          Text(
+                            'Loan Distribute',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                              backgroundColor: Colors.pinkAccent, radius: 6),
+                          SizedBox(width: 8),
+                          Text(
+                            'Available Balance',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        children: [
+                          CircleAvatar(backgroundColor: Colors.orange, radius: 6),
+                          SizedBox(width: 8),
+                          Text(
+                            'Your Saving',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+  
 
 Widget _buildMonthlyCollectionChart() {
   return LineChart(
