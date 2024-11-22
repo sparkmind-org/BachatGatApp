@@ -13,7 +13,9 @@ import '../screens/menu/menu_screen.dart';
 import '../screens/add/addtilescreen/issue_notice_screen.dart';
 import '../screens/add/addtilescreen/loan_emi_screen.dart';
 import '../screens/add/addtilescreen/bank_details_screen.dart';
-import '../screens/add/addtilescreen/meeting_schedule_screen.dart';
+import '../screens/add/addtilescreen/schedule_meeting/schedule_meeting_screen.dart';
+//import '../screens/add/addtilescreen/meeting_schedule_screen.dart';
+
 import '../screens/add/addtilescreen/income_expense_screen.dart';
 import '../screens/add/addtilescreen/dividend_repay_screen.dart';
 import '../screens/add/addtilescreen/fine_collection_screen.dart';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../routes/route_generator.dart';
+import 'components/custom_text_field.dart';
+import 'components/gradient_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -8,125 +10,185 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Rive animation in the background
-          
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Logo with SVG icon
-                  Column(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icon/LoginIcon.svg',
-                        height: 120,
-                        width: 120,
+      backgroundColor: const Color(0xFFF8FAFF),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.blue[50]!.withOpacity(0.3),
+                  Colors.white,
+                  Colors.white,
+                ],
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 50),
+                // Logo Section with Animation
+                TweenAnimationBuilder(
+                  tween: Tween<double>(begin: 0, end: 1),
+                  duration: const Duration(milliseconds: 800),
+                  builder: (context, double value, child) {
+                    return Transform.scale(
+                      scale: value,
+                      child: child,
+                    );
+                  },
+                  child: Hero(
+                    tag: 'logo',
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 85, 157, 216).withOpacity(0.2),
+                            spreadRadius: 10,
+                            blurRadius: 20,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
+                      child: SvgPicture.asset(
+                        'assets/icon/LoginIcon.svg',
+                        height: 110,
+                        width: 110,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                // App Title with Animation
+                TweenAnimationBuilder(
+                  tween: Tween<double>(begin: 0, end: 1),
+                  duration: const Duration(milliseconds: 800),
+                  builder: (context, double value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Transform.translate(
+                        offset: Offset(0, 20 * (1 - value)),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: const Column(
+                    children: [
+                      Text(
                         'Bachat Gat',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Welcome Back',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF4A4A4A),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Hello there, sign in to continue',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xFF6B7280),
+                          letterSpacing: 0.3,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    'Welcome Back\nHello there, sign in to continue',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  // Account Number Input
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Account No',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      filled: true,
-                      fillColor: Colors.black.withOpacity(0.1),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  const SizedBox(height: 20),
-                  // Password Input
-                  TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      filled: true,
-                      fillColor: Colors.black.withOpacity(0.1),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: const Icon(Icons.visibility, color: Colors.black),
-                    ),
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  const SizedBox(height: 10),
-                  // Forgot Password
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                       Navigator.pushNamed(context, RouteGenerator.home);
-                      },
-                      child: const Text(
-                        'Forgot your password?',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Login Button
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      backgroundColor: Colors.blueAccent,
-                    ),
+                ),
+                const SizedBox(height: 48),
+                // Login Form
+                const CustomTextField(
+                  label: 'Account No',
+                  prefixIcon: Icons.account_circle_outlined,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 24),
+                const CustomTextField(
+                  label: 'Password',
+                  prefixIcon: Icons.lock_outline,
+                  suffixIcon: Icons.visibility_outlined,
+                  isPassword: true,
+                ),
+                const SizedBox(height: 16),
+                // Forgot Password
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
                     onPressed: () {
-                     Navigator.pushNamed(context, RouteGenerator.home);
+                      Navigator.pushNamed(context, RouteGenerator.home);
                     },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.blue[700],
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                    ),
                     child: const Text(
-                      'Login',
-                      style: TextStyle(fontSize: 18),
+                      'Forgot your password?',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  // Register Option
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Don't have an account? Request Admin",
-                      style: TextStyle(color: Colors.black),
+                ),
+                const SizedBox(height: 32),
+                // Login Button
+                GradientButton(
+                  text: 'Login',
+                  onPressed: () {
+                    Navigator.pushNamed(context, RouteGenerator.home);
+                  },
+                ),
+                const SizedBox(height: 24),
+                // Register Option
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF4A4A4A),
+                      ),
+                      children: [
+                        const TextSpan(text: "Don't have an account? "),
+                        TextSpan(
+                          text: "Request Admin",
+                          style: TextStyle(
+                            color: Colors.blue[700],
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 24),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

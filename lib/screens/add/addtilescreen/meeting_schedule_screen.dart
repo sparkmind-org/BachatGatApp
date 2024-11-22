@@ -3,7 +3,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../../widgets/custom_footer.dart';
 import '../../../widgets/custom_app_bar.dart';
 
-
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
 
@@ -13,7 +12,7 @@ class ScheduleMeetingScreen extends StatefulWidget {
 
 class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
   int _selectedIndex = 2;
-  final List<Meeting> _meetings = []; // List to store meetings
+  final List<Meeting> _meetings = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _onItemTapped(int index) {
@@ -49,7 +48,13 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
           title: Text(meeting == null ? 'Add Meeting' : 'Edit Meeting'),
           content: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Text(
+                  'Meeting Details',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
                 TextField(
                   decoration: const InputDecoration(labelText: 'Meeting Title'),
                   controller: TextEditingController(text: title),
@@ -60,7 +65,12 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                   controller: TextEditingController(text: description),
                   onChanged: (value) => description = value,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 16),
+                const Text(
+                  'Schedule',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -103,9 +113,14 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
             ),
           ),
           actions: [
+            if (meeting != null)
+              TextButton(
+                onPressed: () => _confirmCancelMeeting(index!),
+                child: const Text('Cancel Meeting'),
+              ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text('Close'),
             ),
             TextButton(
               onPressed: () {
@@ -142,7 +157,7 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text(meeting == null ? 'Add' : 'Save'),
+              child: Text(meeting == null ? 'Add Meeting' : 'Save Changes'),
             ),
           ],
         );
@@ -150,17 +165,17 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
     );
   }
 
-  void _deleteMeeting(int index) {
+  void _confirmCancelMeeting(int index) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Delete Meeting'),
-          content: const Text('Are you sure you want to delete this meeting?'),
+          title: const Text('Cancel Meeting'),
+          content: const Text('Are you sure you want to cancel this meeting?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: const Text('No'),
             ),
             TextButton(
               onPressed: () {
@@ -169,7 +184,7 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text('Delete'),
+              child: const Text('Yes'),
             ),
           ],
         );
@@ -181,9 +196,9 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-       appBar: const CustomAppBar(
-          title: 'Schedule Meeting',
-           showBackButton: true,
+      appBar: const CustomAppBar(
+        title: 'Schedule Meeting',
+        showBackButton: true,
       ),
       body: Column(
         children: [
