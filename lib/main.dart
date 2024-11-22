@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'app/routes.dart';
-import 'screens/home/home_screen.dart';
+import 'routes/route_generator.dart';
+import 'error/error_screen.dart';
 
 void main() {
   runApp(const BachatGatApp());
 }
 
 class BachatGatApp extends StatelessWidget {
-  const BachatGatApp({Key? key}) : super(key: key);
+  const BachatGatApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,14 @@ class BachatGatApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BachatGat',
       theme: ThemeData(primarySwatch: Colors.teal),
-      initialRoute: '/',
-      routes: appRoutes,
+      initialRoute: RouteGenerator.login,
+     onGenerateRoute: RouteGenerator.generateRoute,
+      onUnknownRoute: (settings) {
+        // Handle completely unknown routes
+        return MaterialPageRoute(
+          builder: (context) => const ErrorScreen(),
+        );
+    },
     );
-  }
+  }  
 }

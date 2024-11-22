@@ -1,40 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import '../../../widgets/custom_footer.dart'; // Ensure this import path is correct
 
 class AddMemberScreen extends StatefulWidget {
-  const AddMemberScreen({Key? key}) : super(key: key);
+  const AddMemberScreen({super.key});
 
   @override
-  _AddMemberScreenState createState() => _AddMemberScreenState();
+  AddMemberScreenState createState() => AddMemberScreenState();
 }
 
-class _AddMemberScreenState extends State<AddMemberScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _roleController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _mobileController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _documentController = TextEditingController();
+class AddMemberScreenState extends State<AddMemberScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
   int _selectedIndex = 2; // Index for the 'Add' screen in bottom navigation
-
-  // Date picker function
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-        _dateController.text = DateFormat('dd/MM/yyyy').format(picked);
-      });
-    }
-  }
 
   // Bottom navigation logic
   void _onItemTapped(int index) {
@@ -68,7 +47,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
+        child: FormBuilder(
           key: _formKey,
           child: SingleChildScrollView(
             child: Column(
@@ -87,24 +66,23 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 const SizedBox(height: 20),
 
                 // Name Field
-                TextFormField(
-                  controller: _nameController,
+                FormBuilderTextField(
+                  name: 'name',
                   decoration: const InputDecoration(
                     labelText: 'Name',
                     hintText: 'Enter your name',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Name cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.minLength(3),
+                  ]),
                 ),
                 const SizedBox(height: 16),
 
                 // Role Dropdown
-                DropdownButtonFormField<String>(
+                FormBuilderDropdown<String>(
+                  name: 'role',
                   decoration: const InputDecoration(
                     labelText: 'Role',
                     border: OutlineInputBorder(),
@@ -115,114 +93,92 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             child: Text(role),
                           ))
                       .toList(),
-                  onChanged: (value) {
-                    _roleController.text = value!;
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Role cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.required(),
                 ),
                 const SizedBox(height: 16),
 
                 // Date Field
-                TextFormField(
-                  controller: _dateController,
-                  decoration: InputDecoration(
+                FormBuilderDateTimePicker(
+                  name: 'date',
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                  format: DateFormat('dd/MM/yyyy'),
+                  inputType: InputType.date,
+                  decoration: const InputDecoration(
                     labelText: 'Date',
                     hintText: 'DD/MM/YYYY',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.calendar_today),
-                      onPressed: () => _selectDate(context),
-                    ),
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.calendar_today),
                   ),
-                  readOnly: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Date cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.required(),
                 ),
                 const SizedBox(height: 16),
 
                 // Mobile Number
-                TextFormField(
-                  controller: _mobileController,
+                FormBuilderTextField(
+                  name: 'mobile',
                   decoration: const InputDecoration(
                     labelText: 'Mob No',
                     hintText: 'Enter your mobile number',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Mobile number cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.numeric(),
+                    FormBuilderValidators.minLength(10),
+                  ]),
                 ),
                 const SizedBox(height: 16),
 
                 // Address Field
-                TextFormField(
-                  controller: _addressController,
+                FormBuilderTextField(
+                  name: 'address',
                   decoration: const InputDecoration(
                     labelText: 'Address',
                     hintText: 'Enter your address',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Address cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.required(),
                 ),
                 const SizedBox(height: 16),
 
                 // Email ID
-                TextFormField(
-                  controller: _emailController,
+                FormBuilderTextField(
+                  name: 'email',
                   decoration: const InputDecoration(
                     labelText: 'Email ID',
                     hintText: 'Enter your email address',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.email(),
+                  ]),
                 ),
                 const SizedBox(height: 16),
 
                 // Password Field
-                TextFormField(
-                  controller: _passwordController,
+                FormBuilderTextField(
+                  name: 'password',
                   decoration: const InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter your password',
                     border: OutlineInputBorder(),
                   ),
                   obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Password cannot be empty';
-                    }
-                    return null;
-                  },
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.minLength(6),
+                  ]),
                 ),
                 const SizedBox(height: 16),
 
-                // Document Upload (Simulated as a text field with file icon)
-                TextFormField(
-                  controller: _documentController,
+                // Document Upload Field
+                FormBuilderTextField(
+                  name: 'document',
                   decoration: const InputDecoration(
                     labelText: 'Upload Doc',
                     hintText: 'Choose File',
@@ -231,7 +187,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                   ),
                   readOnly: true,
                   onTap: () {
-                    // Logic for choosing a file can be added here
+                    // Logic for file picker can be added here
                   },
                 ),
                 const SizedBox(height: 32),
@@ -242,8 +198,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Logic for saving form data goes here
+                        if (_formKey.currentState!.saveAndValidate()) {
+                          final formData = _formKey.currentState!.value;
+                          // Process formData
+                          print('Form Data: $formData');
                         }
                       },
                       style: ElevatedButton.styleFrom(

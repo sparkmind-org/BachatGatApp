@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/members/members_list_screen.dart';
-import '../screens/add/member_add_screen.dart/add_member_screen.dart';
+import '../screens/add/member_add/add_member_screen.dart';
 import '../screens/loan/issue_loan_screen.dart';
 import '../screens/loan/loan_collection_screen.dart';
 import '../screens/reports/reports_screen.dart';

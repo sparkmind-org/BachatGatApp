@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../widgets/custom_footer.dart';
+import '../../widgets/custom_app_bar.dart';
+import '../../routes/route_generator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,30 +12,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; 
   int _currentTabIndex = 0; // 0: Group Overview, 1: Insights
   int _currentListIndex = 0; // 0: Defaulters, 1: Contributors, 2: Pending Saving EMI, 3: Pending Loan EMI
 
   // Bottom navigation bar handler
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, RouteGenerator.home);
         break;
       case 1:
-        Navigator.pushNamed(context, '/members');
+        Navigator.pushNamed(context, RouteGenerator.members);
         break;
       case 2:
-        Navigator.pushNamed(context, '/add');
+        Navigator.pushNamed(context, RouteGenerator.add);
         break;
       case 3:
-        Navigator.pushNamed(context, '/reports');
+        Navigator.pushNamed(context, RouteGenerator.reports);
         break;
       case 4:
-        Navigator.pushNamed(context, '/menu');
+        Navigator.pushNamed(context, RouteGenerator.menu);
         break;
     }
   }
@@ -43,50 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F5FD),
-      appBar: AppBar(
-        //backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false, // Remove the back button
-        title: const Text(
-          'Bachat Gat',
-          style: TextStyle(color: Colors.black, fontSize: 18.0),
-        ),
-        centerTitle: true,
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icon/Bellicon.svg',
-                  height: 24,
-                  width: 24,
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/notification');
-                },
-              ),
-              Positioned(
-                  right: 6,
-                  top: 0,
-                  child:  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '2',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
-              ),
-            ],
-          ),
-        ],
+      appBar: const CustomAppBar(
+          title: 'Bachat Gat',
+           showBackButton: false,
       ),
       body: SafeArea(
         child: Column(
@@ -152,7 +109,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+        onItemTapped: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          _onItemTapped(index);
+        },
       ),
     );
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
+import '../../widgets/custom_app_bar.dart';
+import '../../routes/route_generator.dart';
+
 
 class MembersListScreen extends StatefulWidget {
   const MembersListScreen({super.key});
@@ -55,19 +58,19 @@ class MembersListScreenState extends State<MembersListScreen> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, RouteGenerator.home);
         break;
       case 1:
-        Navigator.pushNamed(context, '/members');
+        Navigator.pushNamed(context, RouteGenerator.members);
         break;
       case 2:
-        Navigator.pushNamed(context, '/add');
+        Navigator.pushNamed(context, RouteGenerator.add);
         break;
       case 3:
-        Navigator.pushNamed(context, '/reports');
+        Navigator.pushNamed(context, RouteGenerator.reports);
         break;
       case 4:
-        Navigator.pushNamed(context, '/menu');
+        Navigator.pushNamed(context, RouteGenerator.menu);
         break;
     }
   }
@@ -125,8 +128,9 @@ class MembersListScreenState extends State<MembersListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Members'),
+      appBar: const CustomAppBar(
+        title: 'Members',
+        showBackButton: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

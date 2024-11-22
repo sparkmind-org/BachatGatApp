@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
+import '../../routes/route_generator.dart'; // Import RouteGenerator for route constants
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
@@ -14,19 +15,19 @@ class AddScreenState extends State<AddScreen> {
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, RouteGenerator.home);
         break;
       case 1:
-        Navigator.pushNamed(context, '/members');
+        Navigator.pushNamed(context, RouteGenerator.members);
         break;
       case 2:
-        Navigator.pushNamed(context, '/add');
+        Navigator.pushNamed(context, RouteGenerator.add);
         break;
       case 3:
-        Navigator.pushNamed(context, '/reports');
+        Navigator.pushNamed(context, RouteGenerator.reports);
         break;
       case 4:
-        Navigator.pushNamed(context, '/menu');
+        Navigator.pushNamed(context, RouteGenerator.menu);
         break;
     }
   }
@@ -48,18 +49,17 @@ class AddScreenState extends State<AddScreen> {
           spacing: 12, // Space between cards horizontally
           runSpacing: 12, // Space between cards vertically
           children: [
-            _buildAddCard('Add Saving Collection', Icons.savings, '/add-saving'),
+            _buildAddCard('Add Saving Collection', Icons.savings, RouteGenerator.addSaving),
+            _buildAddCard('Add Loan Installment/EMI', Icons.attach_money, RouteGenerator.addLoanEmi),
+            _buildAddCard('Add Fine Collection', Icons.gavel, RouteGenerator.addFine),
+            _buildAddCard('Issue New Loan', Icons.new_releases, RouteGenerator.issueLoan),
+            _buildAddCard('Add Income/Expense', Icons.receipt, RouteGenerator.addIncomeExpense),
+            _buildAddCard('Add Dividend/Repay', Icons.payments, RouteGenerator.addDividend),
+            _buildAddCard('Add New Member', Icons.person_add, RouteGenerator.addMember),
+            _buildAddCard('Create/Schedule Meeting', Icons.event, RouteGenerator.addMeeting),
             _buildAddCard(
-                'Add Loan Installment/EMI', Icons.attach_money, '/add-loan-emi'),
-            _buildAddCard('Add Fine Collection', Icons.gavel, '/add-fine'),
-            _buildAddCard('Issue New Loan', Icons.new_releases, '/issue-loan'),
-            _buildAddCard('Add Income/Expense', Icons.receipt, '/add-income-expense'),
-            _buildAddCard('Add Dividend/Repay', Icons.payments, '/add-dividend'),
-            _buildAddCard('Add New Member', Icons.person_add, '/add-member'),
-            _buildAddCard('Create/Schedule Meeting', Icons.event, '/add-meeting'),
-            _buildAddCard('Add Bank Details/Statements',
-                Icons.account_balance_wallet, '/add-bank-details'),
-            _buildAddCard('Issue Notice', Icons.notifications_active, '/issue-notice'),
+                'Add Bank Details/Statements', Icons.account_balance_wallet, RouteGenerator.addBankDetails),
+            _buildAddCard('Issue Notice', Icons.notifications_active, RouteGenerator.issueNotice),
           ],
         ),
       ),
@@ -80,7 +80,7 @@ class AddScreenState extends State<AddScreen> {
       onTap: () {
         Navigator.pushNamed(context, route);
       },
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width / 3 - 24, // Adjusted for three cards per row
         child: Card(
           shape: RoundedRectangleBorder(
