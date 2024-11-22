@@ -1,46 +1,41 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_footer.dart';
+import '../../../../routes/router.dart';
+import 'package:go_router/go_router.dart';
+import '../../../widgets/custom_app_bar.dart';
+
 
 class AddLoanEmiScreen extends StatefulWidget {
-  const AddLoanEmiScreen({Key? key}) : super(key: key);
+  const AddLoanEmiScreen({super.key});
 
   @override
-  _AddLoanEmiScreenState createState() => _AddLoanEmiScreenState();
+  AddLoanEmiScreenState createState() => AddLoanEmiScreenState();
 }
 
-class _AddLoanEmiScreenState extends State<AddLoanEmiScreen> {
+class AddLoanEmiScreenState extends State<AddLoanEmiScreen> {
   int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Loan Installment/EMI'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 1,
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
-        iconTheme: const IconThemeData(color: Colors.black),
+      appBar: const CustomAppBar(
+        title: 'Add Loan Installment/EMI',
+        showBackButton: true,
       ),
       body: const Center(
         child: Text(
@@ -48,14 +43,9 @@ class _AddLoanEmiScreenState extends State<AddLoanEmiScreen> {
           style: TextStyle(fontSize: 16),
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+     bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

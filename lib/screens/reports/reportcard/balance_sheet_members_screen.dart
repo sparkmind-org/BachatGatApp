@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_footer.dart';
+import '../../../../routes/router.dart';
+import 'package:go_router/go_router.dart';
 
 class BalanceSheetMembersScreen extends StatefulWidget {
-  const BalanceSheetMembersScreen({Key? key}) : super(key: key);
+  const BalanceSheetMembersScreen({super.key});
 
   @override
-  _BalanceSheetMembersScreenState createState() => _BalanceSheetMembersScreenState();
+  BalanceSheetMembersScreenState createState() => BalanceSheetMembersScreenState();
 }
 
-class _BalanceSheetMembersScreenState extends State<BalanceSheetMembersScreen> {
+class BalanceSheetMembersScreenState extends State<BalanceSheetMembersScreen> {
   int _selectedIndex = 3;
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -50,12 +47,7 @@ class _BalanceSheetMembersScreenState extends State<BalanceSheetMembersScreen> {
       ),
       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

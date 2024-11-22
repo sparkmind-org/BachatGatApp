@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import '../../../../routes/router.dart';
+import 'package:go_router/go_router.dart';
 import '../../widgets/custom_footer.dart'; // Assuming CustomFooter is defined here
 
 class NotificationsScreen extends StatefulWidget {
@@ -34,24 +35,20 @@ class NotificationsScreenState extends State<NotificationsScreen> {
   ];
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -246,14 +243,9 @@ class NotificationsScreenState extends State<NotificationsScreen> {
                 ],
               ),
             ),
-      bottomNavigationBar: CustomFooter(
-        currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+           bottomNavigationBar: CustomFooter(
+            currentIndex: _selectedIndex,
+            onItemTapped: _onItemTapped,
       ),
     );
   }

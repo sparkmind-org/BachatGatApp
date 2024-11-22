@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_footer.dart';
+import '../../../../routes/router.dart';
+import 'package:go_router/go_router.dart';
 
 class OtherIncomeScreen extends StatefulWidget {
-  const OtherIncomeScreen({Key? key}) : super(key: key);
+  const OtherIncomeScreen({super.key});
 
   @override
-  _OtherIncomeScreenState createState() => _OtherIncomeScreenState();
+  OtherIncomeScreenState createState() => OtherIncomeScreenState();
 }
 
-class _OtherIncomeScreenState extends State<OtherIncomeScreen> {
+class OtherIncomeScreenState extends State<OtherIncomeScreen> {
   int _selectedIndex = 3;
 
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+ void _onItemTapped(int index) {
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -48,14 +45,9 @@ class _OtherIncomeScreenState extends State<OtherIncomeScreen> {
           style: TextStyle(fontSize: 16),
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+     bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

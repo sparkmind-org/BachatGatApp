@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
-import '../../routes/route_generator.dart'; // Import RouteGenerator for route constants
+import '../../widgets/custom_app_bar.dart';
+import '../../routes/router.dart';
+import 'package:go_router/go_router.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({super.key});
@@ -13,35 +15,26 @@ class AddScreenState extends State<AddScreen> {
   int _selectedIndex = 2; // Set to 2 since this is the 'Add' screen
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, RouteGenerator.home);
-        break;
-      case 1:
-        Navigator.pushNamed(context, RouteGenerator.members);
-        break;
-      case 2:
-        Navigator.pushNamed(context, RouteGenerator.add);
-        break;
-      case 3:
-        Navigator.pushNamed(context, RouteGenerator.reports);
-        break;
-      case 4:
-        Navigator.pushNamed(context, RouteGenerator.menu);
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add'),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
-        centerTitle: true,
+      appBar: const CustomAppBar(
+        title: 'Add',
+        showBackButton: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -49,37 +42,30 @@ class AddScreenState extends State<AddScreen> {
           spacing: 12, // Space between cards horizontally
           runSpacing: 12, // Space between cards vertically
           children: [
-            _buildAddCard('Add Saving Collection', Icons.savings, RouteGenerator.addSaving),
-            _buildAddCard('Add Loan Installment/EMI', Icons.attach_money, RouteGenerator.addLoanEmi),
-            _buildAddCard('Add Fine Collection', Icons.gavel, RouteGenerator.addFine),
-            _buildAddCard('Issue New Loan', Icons.new_releases, RouteGenerator.issueLoan),
-            _buildAddCard('Add Income/Expense', Icons.receipt, RouteGenerator.addIncomeExpense),
-            _buildAddCard('Add Dividend/Repay', Icons.payments, RouteGenerator.addDividend),
-            _buildAddCard('Add New Member', Icons.person_add, RouteGenerator.addMember),
-            _buildAddCard('Create/Schedule Meeting', Icons.event, RouteGenerator.addMeeting),
+            _buildAddCard('Add Saving Collection', Icons.savings, Routes.addSaving),
+            _buildAddCard('Add Loan Installment/EMI', Icons.attach_money, Routes.addLoanEmi),
+            _buildAddCard('Add Fine Collection', Icons.gavel, Routes.addFine),
+            _buildAddCard('Issue New Loan', Icons.new_releases, Routes.issueLoan),
+            _buildAddCard('Add Income/Expense', Icons.receipt, Routes.addIncomeExpense),
+            _buildAddCard('Add Dividend/Repay', Icons.payments, Routes.addDividend),
+            _buildAddCard('Add New Member', Icons.person_add, Routes.addMember),
+            _buildAddCard('Create/Schedule Meeting', Icons.event, Routes.addMeeting),
             _buildAddCard(
-                'Add Bank Details/Statements', Icons.account_balance_wallet, RouteGenerator.addBankDetails),
-            _buildAddCard('Issue Notice', Icons.notifications_active, RouteGenerator.issueNotice),
+                'Add Bank Details/Statements', Icons.account_balance_wallet, Routes.addBankDetails),
+            _buildAddCard('Issue Notice', Icons.notifications_active, Routes.issueNotice),
           ],
         ),
       ),
       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }
 
   Widget _buildAddCard(String title, IconData iconData, String route) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, route);
-      },
+      onTap: () => context.go(route), // Updated to use GoRouter
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3 - 24, // Adjusted for three cards per row
         child: Card(
@@ -99,7 +85,7 @@ class AddScreenState extends State<AddScreen> {
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   maxLines: 2,
-                  overflow: TextOverflow.ellipsis, // Adds ellipsis for overflow
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

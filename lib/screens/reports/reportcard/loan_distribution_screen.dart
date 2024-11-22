@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_footer.dart';
+import '../../../../routes/router.dart';
+import 'package:go_router/go_router.dart';
 
 class LoanDistributionScreen extends StatefulWidget {
-  const LoanDistributionScreen({Key? key}) : super(key: key);
+  const LoanDistributionScreen({super.key});
 
   @override
-  _LoanDistributionScreenState createState() => _LoanDistributionScreenState();
+  LoanDistributionScreenState createState() => LoanDistributionScreenState();
 }
 
-class _LoanDistributionScreenState extends State<LoanDistributionScreen> {
+class LoanDistributionScreenState extends State<LoanDistributionScreen> {
   int _selectedIndex = 3; // Assuming 'Reports' is the 4th item in the footer
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -48,14 +45,9 @@ class _LoanDistributionScreenState extends State<LoanDistributionScreen> {
           style: TextStyle(fontSize: 16),
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+     bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

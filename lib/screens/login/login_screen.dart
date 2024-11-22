@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../routes/route_generator.dart';
+import 'package:go_router/go_router.dart';
+import '../../routes/router.dart';
 import 'components/custom_text_field.dart';
 import 'components/gradient_button.dart';
 
@@ -30,7 +31,6 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 50),
-                // Logo Section with Animation
                 TweenAnimationBuilder(
                   tween: Tween<double>(begin: 0, end: 1),
                   duration: const Duration(milliseconds: 800),
@@ -63,7 +63,6 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-                // App Title with Animation
                 TweenAnimationBuilder(
                   tween: Tween<double>(begin: 0, end: 1),
                   duration: const Duration(milliseconds: 800),
@@ -112,7 +111,6 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 48),
-                // Login Form
                 const CustomTextField(
                   label: 'Account No',
                   prefixIcon: Icons.account_circle_outlined,
@@ -126,13 +124,10 @@ class LoginScreen extends StatelessWidget {
                   isPassword: true,
                 ),
                 const SizedBox(height: 16),
-                // Forgot Password
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, RouteGenerator.home);
-                    },
+                    onPressed: () => context.go(Routes.home),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.blue[700],
                       padding: const EdgeInsets.symmetric(
@@ -150,15 +145,11 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 32),
-                // Login Button
                 GradientButton(
                   text: 'Login',
-                  onPressed: () {
-                    Navigator.pushNamed(context, RouteGenerator.home);
-                  },
+                  onPressed: () => context.go(Routes.home),
                 ),
                 const SizedBox(height: 24),
-                // Register Option
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
