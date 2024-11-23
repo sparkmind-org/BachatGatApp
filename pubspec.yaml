@@ -24,7 +24,7 @@ dependencies:
   form_builder_validators: ^10.0.1
   syncfusion_flutter_calendar: ^27.2.2
   go_router: ^14.6.1
-  google_fonts: ^6.2.1
+  
   
   
   

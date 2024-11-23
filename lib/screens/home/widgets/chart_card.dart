@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ChartCard extends StatelessWidget {
   final String title;
@@ -53,7 +52,7 @@ class ChartCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.inter(
+                      style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -64,7 +63,7 @@ class ChartCard extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Text(
                           subtitle!,
-                          style: GoogleFonts.inter(
+                          style: TextStyle(
                             fontSize: 12.0,
                             color: Colors.white.withOpacity(0.9),
                           ),
