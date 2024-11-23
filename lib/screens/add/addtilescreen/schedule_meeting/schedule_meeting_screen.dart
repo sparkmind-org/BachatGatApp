@@ -4,8 +4,8 @@ import '../../../../widgets/custom_app_bar.dart';
 import 'components/calendar_view.dart';
 import 'components/meeting_form_dialog.dart';
 import 'models/meeting.dart';
-import '../../../../routes/route_generator.dart';
-
+import '../../../../routes/route.dart';
+import 'package:go_router/go_router.dart';
 class ScheduleMeetingScreen extends StatefulWidget {
   const ScheduleMeetingScreen({super.key});
 
@@ -19,22 +19,17 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
    void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, RouteGenerator.home);
-        break;
-      case 1:
-        Navigator.pushNamed(context, RouteGenerator.members);
-        break;
-      case 2:
-        Navigator.pushNamed(context, RouteGenerator.add);
-        break;
-      case 3:
-        Navigator.pushNamed(context, RouteGenerator.reports);
-        break;
-      case 4:
-        Navigator.pushNamed(context, RouteGenerator.menu);
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -273,15 +268,10 @@ class ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
           ),
         ],
       ),
-       bottomNavigationBar: CustomFooter(
+        bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
-      )
+        onItemTapped: _onItemTapped,
+      ),
     );
   }
 }

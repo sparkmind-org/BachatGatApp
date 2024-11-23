@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
-import '../../../widgets/custom_footer.dart'; // Ensure this import path is correct
+import '../../../widgets/custom_footer.dart'; 
+import '../../../routes/route.dart';
+import 'package:go_router/go_router.dart';
+// Ensure this import path is correct
 
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});
@@ -17,25 +20,17 @@ class AddMemberScreenState extends State<AddMemberScreen> {
 
   // Bottom navigation logic
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -232,11 +227,9 @@ class AddMemberScreenState extends State<AddMemberScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+        bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

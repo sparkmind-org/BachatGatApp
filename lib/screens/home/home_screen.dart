@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../widgets/custom_footer.dart';
 import '../../widgets/custom_app_bar.dart';
-import '../../routes/route_generator.dart';
+import '../../routes/route.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,23 +18,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentListIndex = 0; // 0: Defaulters, 1: Contributors, 2: Pending Saving EMI, 3: Pending Loan EMI
 
   // Bottom navigation bar handler
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, RouteGenerator.home);
-        break;
-      case 1:
-        Navigator.pushNamed(context, RouteGenerator.members);
-        break;
-      case 2:
-        Navigator.pushNamed(context, RouteGenerator.add);
-        break;
-      case 3:
-        Navigator.pushNamed(context, RouteGenerator.reports);
-        break;
-      case 4:
-        Navigator.pushNamed(context, RouteGenerator.menu);
-        break;
+ void _onItemTapped(int index) {
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -107,14 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+     bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

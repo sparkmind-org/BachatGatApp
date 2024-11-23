@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../routes/route.dart';
+import 'package:go_router/go_router.dart'; // Ensure the path is correct
+
+
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -37,7 +41,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Colors.black,
               ),
               onPressed: () {
-                Navigator.pop(context);
+               // Use GoRouter's context.pop() to navigate back
+                if (GoRouter.of(context).canPop()) {
+                  context.pop();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('No previous screen to navigate back to'),
+                    ),
+                  );
+                }
               },
             )
           : null, // No leading widget if back button isn't needed
@@ -59,9 +72,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 width: 24,
                 
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/notification');
-              },
+              onPressed: () => context.push(Routes.notification),
             ),
             // Badge for notifications
             Positioned(

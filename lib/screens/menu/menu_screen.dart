@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
-import 'package:flutter_svg/svg.dart';
-
+import '../../routes/route.dart';
+import 'package:go_router/go_router.dart';
 import '../../widgets/custom_footer.dart';
+import '../../widgets/custom_app_bar.dart';
+
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -21,23 +23,18 @@ class _MenuScreenState extends State<MenuScreen> {
   bool _isLoanDueDatesEnabled = false;
   bool _isGroupAnnouncementsEnabled = false;
 
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+ void _onItemTapped(int index) {
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -96,49 +93,9 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
-        centerTitle: true,
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icon/Bellicon.svg',
-                  height: 24,
-                  width: 24,
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/notification');
-                },
-              ),
-              Positioned(
-                right: 6,
-                top: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Text(
-                    '2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          
-        ],
+      appBar: const CustomAppBar(
+        title: 'Settings',
+        showBackButton: false,
       ),
       body: SettingsList(
         platform: DevicePlatform.iOS,
@@ -159,14 +116,9 @@ class _MenuScreenState extends State<MenuScreen> {
           _buildLogoutSection(),
         ],
       ),
-      bottomNavigationBar: CustomFooter(
+       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

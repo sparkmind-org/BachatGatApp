@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
+import '../../../../routes/route.dart';
+import 'package:go_router/go_router.dart';
+import '../../widgets/custom_app_bar.dart';
+
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -12,35 +16,26 @@ class ReportsScreenState extends State<ReportsScreen> {
   int _selectedIndex = 3; // Assuming 'Reports' is the 4th item in the footer
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reports'),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20),
-        centerTitle: true,
+       appBar: const CustomAppBar(
+        title: 'Reports',
+        showBackButton: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -51,63 +46,56 @@ class ReportsScreenState extends State<ReportsScreen> {
             _buildReportCard(
               'Loan Distribution Report',
               Icons.attach_money,
-              '/loan-distribution',
+              Routes.loanDistribution,
             ),
             _buildReportCard(
               'Pending Saving EMI',
               Icons.savings,
-              '/pending-saving-emi',
+              Routes.pendingSavingEmi,
             ),
             _buildReportCard(
               'Pending Loan EMI',
               Icons.pending_actions,
-              '/pending-loan-emi',
+              Routes.pendingLoanEmi,
             ),
             _buildReportCard(
               'Other Expenses Report',
               Icons.receipt,
-              '/other-expenses',
+              Routes.otherExpenses,
             ),
             _buildReportCard(
               'Other Income Report',
               Icons.trending_up,
-              '/other-income',
+              Routes.otherIncome,
             ),
             _buildReportCard(
               'Balance Sheet of Bachat Gat',
               Icons.pie_chart,
-              '/balance-sheet-bachat',
+              Routes.balanceSheetBachat,
             ),
             _buildReportCard(
               'Balance Sheet of Members',
               Icons.people_alt,
-              '/balance-sheet-members',
+              Routes.balanceSheetMembers,
             ),
             _buildReportCard(
               'Loan Requirement & Risk Validation Report',
               Icons.assessment,
-              '/loan-risk-validation',
+              Routes.loanRiskValidation,
             ),
           ],
         ),
       ),
       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }
 
   Widget _buildReportCard(String title, IconData iconData, String route) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, route);
-      },
+      onTap: () => context.push(route), // Updated to use GoRouter
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 3 - 24, // Three cards per row
         child: Card(

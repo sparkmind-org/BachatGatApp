@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../widgets/custom_footer.dart'; // Ensure the path is correct
+import '../../../widgets/custom_footer.dart';
+import '../../../../routes/route.dart';
+import 'package:go_router/go_router.dart'; // Ensure the path is correct
 
 class IssueLoanScreen extends StatefulWidget {
-  const IssueLoanScreen({Key? key}) : super(key: key);
+  const IssueLoanScreen({super.key});
 
   @override
-  _IssueLoanScreenState createState() => _IssueLoanScreenState();
+  IssueLoanScreenState createState() => IssueLoanScreenState();
 }
 
-class _IssueLoanScreenState extends State<IssueLoanScreen> {
+class IssueLoanScreenState extends State<IssueLoanScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _accountNumberController = TextEditingController(text: '2481049815242');
   final TextEditingController _dateController = TextEditingController();
@@ -33,26 +35,18 @@ class _IssueLoanScreenState extends State<IssueLoanScreen> {
   }
 
   // Bottom navigation logic
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/members');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/add');
-        break;
-      case 3:
-        Navigator.pushNamed(context, '/reports');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/menu');
-        break;
+    void _onItemTapped(int index) {
+    setState(() => _selectedIndex = index);
+    final routes = [
+      Routes.home,
+      Routes.members,
+      Routes.add,
+      Routes.reports,
+      Routes.menu,
+    ];
+    
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -223,11 +217,9 @@ class _IssueLoanScreenState extends State<IssueLoanScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+     bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

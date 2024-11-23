@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../widgets/custom_footer.dart';
 import '../../widgets/custom_app_bar.dart';
-import '../../routes/route_generator.dart';
+import '../../routes/route.dart';
+import 'package:go_router/go_router.dart';
+
 
 
 class MembersListScreen extends StatefulWidget {
@@ -56,22 +58,10 @@ class MembersListScreenState extends State<MembersListScreen> {
   ];
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, RouteGenerator.home);
-        break;
-      case 1:
-        Navigator.pushNamed(context, RouteGenerator.members);
-        break;
-      case 2:
-        Navigator.pushNamed(context, RouteGenerator.add);
-        break;
-      case 3:
-        Navigator.pushNamed(context, RouteGenerator.reports);
-        break;
-      case 4:
-        Navigator.pushNamed(context, RouteGenerator.menu);
-        break;
+    setState(() => _selectedIndex = index);
+    final routes = [Routes.home, Routes.members, Routes.add, Routes.reports, Routes.menu];
+    if (index >= 0 && index < routes.length) {
+      context.go(routes[index]);
     }
   }
 
@@ -130,7 +120,7 @@ class MembersListScreenState extends State<MembersListScreen> {
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Members',
-        showBackButton: true,
+        showBackButton: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -246,14 +236,9 @@ class MembersListScreenState extends State<MembersListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomFooter(
+       bottomNavigationBar: CustomFooter(
         currentIndex: _selectedIndex,
-        onItemTapped: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _onItemTapped(index);
-        },
+        onItemTapped: _onItemTapped,
       ),
     );
   }

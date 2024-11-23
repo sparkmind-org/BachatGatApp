@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import '../routes/route_generator.dart'; // Import RouteGenerator for route constants
+import 'package:go_router/go_router.dart';
+import '../routes/route.dart';
 
 class CustomFooter extends StatelessWidget {
   final int currentIndex;
@@ -20,22 +21,21 @@ class CustomFooter extends StatelessWidget {
         onItemTapped(index);
         switch (index) {
           case 0:
-            Navigator.pushNamed(context, RouteGenerator.home);
+            context.go(Routes.home);
             break;
           case 1:
-            Navigator.pushNamed(context, RouteGenerator.members);
+            context.go(Routes.members);
             break;
           case 2:
-            Navigator.pushNamed(context, RouteGenerator.add);
+            context.go(Routes.add);
             break;
           case 3:
-            Navigator.pushNamed(context, RouteGenerator.reports);
+            context.go(Routes.reports);
             break;
           case 4:
-            Navigator.pushNamed(context, RouteGenerator.menu);
+            context.go(Routes.menu);
             break;
           default:
-            // Optionally handle unexpected indices
             break;
         }
       },
